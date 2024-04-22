@@ -28,6 +28,7 @@ function UserForms() {
 
   const [id, setId] = useState(1); 
   const [names, setNames] = useState(""); 
+
   const [userDatas, setUserDatas] = useState([]);
   const handleSave = () => {
     const newUser = {
@@ -36,13 +37,36 @@ function UserForms() {
     };
         setUserDatas([...userDatas, newUser]);
     setId(id + 1);
-
-  
     setNames("");
   };
   const handleSubmit = () => {
-    setUserData({ name, address, email, phone });
-    onOpen();
+      // Check if any field is empty
+      if (!name || !address || !email || !phone) {
+        alert('Please fill all fields');
+        return;
+      }
+    
+      // Check if email is valid
+      const emailRegex = /^\S+@\S+\.\S+$/;
+      if (!emailRegex.test(email)) {
+        alert('Please enter a valid email address');
+        return;
+      }
+    
+      // Check if phone is a valid number
+      if (isNaN(phone)) {
+        alert('Please enter a valid phone number');
+        return;
+      }
+    
+      // If all validations pass, proceed to save the data
+      setUserData({ name, address, email, phone });
+      onOpen();
+      setName('');
+      setEmail('')
+      setAddress('')
+      setPhone('')
+    
   };
 
   const handleClose = () => {
@@ -59,6 +83,7 @@ function UserForms() {
       <VStack spacing={2} align="stretch" pb={3}>
         <Input
           placeholder="Name"
+          type="text"
           value={names}
           onChange={(e) => setNames(e.target.value)}
         />
@@ -85,6 +110,7 @@ function UserForms() {
       <VStack spacing={2} align="stretch" pb={3}>
         <Input
           placeholder="Name"
+          type="text"
           name="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -92,17 +118,20 @@ function UserForms() {
         <Input
           placeholder="Address"
           name="address"
+          type="text"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
         />
         <Input
           placeholder="Email"
           name="email"
+          type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <Input
           placeholder="Phone"
+          type="number"
           name="phone"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}

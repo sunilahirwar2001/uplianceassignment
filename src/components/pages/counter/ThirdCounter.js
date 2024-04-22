@@ -6,7 +6,30 @@ import React, { useState, useEffect } from 'react';
     const savedCount = localStorage.getItem('count');
     return savedCount ? parseInt(savedCount, 10) : 0;
   });  
+  const [isBold, setIsBold] = useState(false);
+  const [isItalic, setIsItalic] = useState(false);
+  const [isUnderline, setIsUnderline] = useState(false);
 
+  const handleBoldClick = () => {
+    setIsBold(!isBold);
+  };
+
+  const handleItalicClick = () => {
+    setIsItalic(!isItalic);
+  };
+
+  const handleUnderlineClick = () => {
+    setIsUnderline(!isUnderline);
+  };
+
+  const generateStyle = () => {
+    const style = {};
+    if (isBold) style.fontWeight = 'bold';
+    if (isItalic) style.fontStyle = 'italic';
+    if (isUnderline) style.textDecoration = 'underline';
+    return style;
+  };
+  
   const { userData } = useData(); 
 
   const userDataJSON = JSON.stringify(userData, null, 2);
@@ -50,9 +73,27 @@ import React, { useState, useEffect } from 'react';
           </HStack>
         </Box>
   
-        <Box borderWidth="1px" borderRadius="lg" p={4} mt={3} height="300px" margin="20px" >
+        <Box borderWidth="1px" borderRadius="lg" p={4} mt={3} height="300px" margin="20px">
       <VStack>
-        <Textarea placeholder="Enter your text" width='500px' height='250px' value={userDataJSON} readOnly />
+        <Textarea
+          placeholder="Enter your text"
+          width='500px'
+          height='200px'
+          value={userDataJSON}
+          readOnly
+          style={{ ...generateStyle() }}
+       / >
+        <HStack>
+        <Button onClick={handleBoldClick} colorScheme={isBold ? 'blue' : 'gray'}>
+          Bold
+        </Button>
+        <Button onClick={handleItalicClick} colorScheme={isItalic ? 'blue' : 'gray'}>
+          Italic
+        </Button>
+        <Button onClick={handleUnderlineClick} colorScheme={isUnderline ? 'blue' : 'gray'}>
+          Underline
+        </Button>
+        </HStack>
       </VStack>
     </Box>
       </Grid>
